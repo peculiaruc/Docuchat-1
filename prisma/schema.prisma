@@ -19,6 +19,8 @@ model user {
     createdAt      DateTime  @default(now())
     updatedAt      DateTime  @updatedAt
     refreshTokens  RefreshToken[]
+    usageLogs      UsageLog[]
+    conversations  Conversation[]
 }
 
 model RefreshToken {
@@ -31,6 +33,31 @@ model RefreshToken {
 
     @@index([userId])
     @@index([expiresAt])
+}
+
+model UsageLog {
+    id        String   @id @default(cuid())
+    userId    String
+    action    String
+    tokens    Int      @default(0)
+    costUsd   Float    @default(0)
+    metadata  String?
+    createdAt DateTime @default(now())
+    user      user     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
+    @@index([action])
+}
+
+model Conversation {
+    id        String   @id @default(cuid())
+    userId    String
+    title     String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    user      user     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
 }
 
 model Document {

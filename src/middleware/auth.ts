@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { verifyAccessToken } from '../lib/tokens';
+import { verifyAccessToken } from '../lib/token';
 
 // Extend Express Request to include user
 declare global {

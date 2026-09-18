@@ -28,6 +28,16 @@ export type user = Prisma.userModel
  */
 export type RefreshToken = Prisma.RefreshTokenModel
 /**
+ * Model UsageLog
+ * 
+ */
+export type UsageLog = Prisma.UsageLogModel
+/**
+ * Model Conversation
+ * 
+ */
+export type Conversation = Prisma.ConversationModel
+/**
  * Model Document
  * 
  */
