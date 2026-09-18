@@ -14,17 +14,17 @@ export const userRepository = {
 
     async createUser(data: {
         name: string
-        email: string; 
-        password: string }) {
+        email: string;
+        passwordHash: string }) {
         return prisma.user.create({
             data
         });
     },
 
     async updateById(id: string, data: Partial <{
-         name: string; 
-         email: string; 
-         isActive: string }>) {
+         name: string;
+         email: string;
+         isActive: boolean }>) {
 
         return prisma.user.update({
             where: { id },
