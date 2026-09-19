@@ -1,0 +1,198 @@
+openapi: 3.0.0
+info:
+  title: DocuChat API
+  version: 1.0.0
+  description: AI-powered document Q&A system
+tags:
+  - name: Health
+  - name: Auth
+  - name: Documents
+  - name: Conversations
+paths:
+  /health:
+    get:
+      tags: [Health]
+      summary: Health check
+      security: []
+      servers:
+        - url: /
+      responses:
+        "200":
+          description: Server is running
+          
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Register a user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email, password]
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "201":
+          description: User created
+        "400":
+          description: Validation error
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Log in
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Access and refresh tokens
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Refresh tokens
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        "200":
+          description: New tokens
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Log out
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        "200":
+          description: Logged out
+
+  /documents:
+    get:
+      tags: [Documents]
+      summary: List documents
+      responses:
+        "200":
+          description: Document list
+    post:
+      tags: [Documents]
+      summary: Create a document
+      responses:
+        "201":
+          description: Document created
+
+  /documents/{id}:
+    get:
+      tags: [Documents]
+      summary: Get a document
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Document
+        "404":
+          description: Not found
+    delete:
+      tags: [Documents]
+      summary: Delete a document
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Deleted
+
+  /conversations:
+    get:
+      tags: [Conversations]
+      summary: List conversations
+      responses:
+        "200":
+          description: Conversation list
+    post:
+      tags: [Conversations]
+      summary: Create a conversation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title]
+              properties:
+                title:
+                  type: string
+                documentId:
+                  type: string
+      responses:
+        "201":
+          description: Conversation created
+
+  /conversations/{id}/messages:
+    post:
+      tags: [Conversations]
+      summary: Send a message
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [content]
+              properties:
+                content:
+                  type: string
+      responses:
+        "201":
+          description: Message accepted

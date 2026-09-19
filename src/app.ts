@@ -4,15 +4,24 @@ import helmet from 'helmet';
 import { config } from './lib/config.js';
 import { logger } from './lib/logger.js';
 import { errorHandler } from './middleware/errorHandler.js';
+import { authenticate as auth } from './middleware/auth.middleware.js';
 import './events/auth.events.js';
-import { authRoutes } from './routes/auth.js';
+import { authRoutes } from './routes/auth.routes.js';
 import { documentRoutes } from './routes/documents.js';
+import { conversationRoutes } from './routes/conversations.routes.js';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './config/swagger.js';
+
 
 const app = express();
 
 //MIDDLEWARE
 app.use(cors());                    // Security header
-app.use(helmet());                  //Cross-origin requestq
+app.use(
+ helmet({
+    contentSecurityPolicy: false,
+  })
+);
 app.use(express.json());            // Parse JSON request bodies
 
 //===REQUEST LOGGING===
@@ -35,9 +44,29 @@ app.get('/health', (req, res) => {
 });
 
 // ===ROUTES===
-app.use('/api/auth', authRoutes);
-app.use('/api/documents', documentRoutes);
-//app.use('/api/v1/chat', chatRouter);
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/documents', auth,  documentRoutes);
+app.use('/api/v1/conversations', auth, conversationRoutes);
+
+
+//API V2 (is not needed now)
+// app.use('/api/v2/auth', authRoutesV2);
+// app.use('/api/v2/documents', documentRoutesV2);
+// app.use('/api/v2/conversations', conversationRoutesV2);
+
+// ===SWAGGER===
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.get("/api-docs.json", (_req, res) => {
+  res.json(swaggerSpec);
+});
+
+// 404 handler for unknown routes
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    error: {  code: 'NOT_FOUND', message: 'Route ${req.path} not found'},
+  });
+});
 
 // ===ERROR HANDLER=== (must be last middleware)
 app.use(errorHandler);
