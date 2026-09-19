@@ -8,12 +8,11 @@ const router = Router();
 router.get('/health', (req, res) => res.json({ status: 'ok' }));
 
 // Protected route - requires valid access token
-router.get('/documents', authenticate, async (req, res) => {
-  // req.user is guaranteed to exist here
+router.get('/', authenticate, async (req, res) => {
   const docs = await prisma.document.findMany({
     where: { userId: req.user!.id },
   });
   res.json(docs);
 });
 
-// export default router;
+export const documentRoutes = router;
