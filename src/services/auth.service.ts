@@ -4,6 +4,7 @@ import { appEvents } from "../lib/events";
 import { prisma } from "../lib/prisma";
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../lib/token";
 import crypto from "crypto";
+import { ConflictError, UnauthorizedError } from "../lib/errors";
 
 //Register
 export async function register(data: {
@@ -16,7 +17,7 @@ export async function register(data: {
         where: { email: data.email.toLowerCase().trim() },
     });
     if (existing) {
-        throw new Error("Email already registered");
+        throw new ConflictError("Email already registered");
     }
 
     const passwordHash = await hashPassword(data.password);
@@ -48,7 +49,7 @@ export async function login(data: {
         //     deviceInfo: data.deviceInfo,
         //     reason: "user_not_found",
         // });
-        throw new Error("Invalid credentials");
+        throw new UnauthorizedError("Invalid credentials");
     }
 
     const valid = await verifyPassword(data.password, user.passwordHash);
@@ -58,7 +59,7 @@ export async function login(data: {
         //     deviceInfo: data.deviceInfo,
         //     reason: "invalid_password",
         // });
-        throw new Error("Invalid credentials");
+        throw new UnauthorizedError("Invalid credentials");
     }
 
     //Generate tokens
