@@ -11,6 +11,9 @@ import { documentRoutes } from './routes/documents.js';
 import { conversationRoutes } from './routes/conversations.routes.js';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './config/swagger.js';
+import './events/auth.events';
+import './events/admin.events';
+import adminRoutes from './routes/admin';
 
 
 const app = express();
@@ -47,7 +50,7 @@ app.get('/health', (req, res) => {
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/documents', auth,  documentRoutes);
 app.use('/api/v1/conversations', auth, conversationRoutes);
-
+app.use('/api/v1/admin', adminRoutes);
 
 //API V2 (is not needed now)
 // app.use('/api/v2/auth', authRoutesV2);
