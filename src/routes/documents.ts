@@ -1,7 +1,10 @@
 import { Request, Response, NextFunction, Router } from "express";
 import { authenticate } from "../middleware/auth.middleware";
+import { requirePermission } from '../middleware/authorize';
 import { validate } from "../middleware/validate";
 import { prisma } from "../lib/prisma";
+import { NotFoundError } from "../lib/errors";
+import { getUserPermissions } from "../services/rbac.service";
 import {
   createDocumentSchema,
   documentParamsSchema,
@@ -51,14 +54,22 @@ async function createDocument(req: Request, res: Response, next: NextFunction) {
 
 async function getDocument(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = String(req.params.id);
-    const doc = await prisma.document.findFirst({
-      where: { id, userId: req.user!.id },
+    const doc = await prisma.document.findUnique({
+      where: { id: String(req.params.id) },
     });
+
     if (!doc) {
-      return res.status(404).json({ error: "Document not found" });
+      throw new NotFoundError("Document not found");
     }
-    res.json(doc);
+
+    if (doc.userId !== req.user!.id) {
+      const permissions = await getUserPermissions(req.user!.id);
+      if (!permissions.has("users:manage")) {
+        throw new NotFoundError("Document not found");
+      }
+    }
+
+    res.json({ success: true, data: doc });
   } catch (error) {
     next(error);
   }
@@ -82,3 +93,27 @@ router.get("/:id", validate(documentParamsSchema), getDocument);
 router.delete("/:id", validate(documentParamsSchema), deleteDocument);
 
 export const documentRoutes = router;
+
+
+// Anyone with documents:read can list documents
+router.get('/',
+  requirePermission('documents:read'),
+  validate(listDocumentSchema),
+  listDocuments
+);
+
+// Only documents:create can upload
+router.post('/',
+  requirePermission('documents:create'),
+  validate(createDocumentSchema),
+  createDocument
+);
+
+// Only documents:delete can delete (admin only)
+router.delete('/:id',
+  requirePermission('admin:documents:delete', 'documents:delete'),
+  validate(documentParamsSchema),
+  deleteDocument
+);
+
+export default router;
