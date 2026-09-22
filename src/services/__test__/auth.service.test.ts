@@ -16,6 +16,12 @@ vi.mock('../../lib/prisma', () => ({
       delete: vi.fn(),
       deleteMany: vi.fn(),
     },
+    role: {
+      findFirst: vi.fn(),
+    },
+    userRole: {
+      create: vi.fn(),
+    },
   },
 }));
 
@@ -35,6 +41,12 @@ describe('auth.service.register', () => {
       tier: 'free',
       passwordHash: '$2b$12$...',
     });
+    (prisma.role.findFirst as any).mockResolvedValue({
+      id: 'role-member',
+      name: 'member',
+      isDefault: true,
+    });
+    (prisma.userRole.create as any).mockResolvedValue({});
 
     const result = await authService.register({
       name: 'Test User',
