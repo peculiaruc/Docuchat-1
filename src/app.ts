@@ -14,6 +14,7 @@ import { swaggerSpec } from './config/swagger.js';
 import './events/auth.events';
 import './events/admin.events';
 import adminRoutes from './routes/admin';
+import './events/document.events.js';
 
 
 const app = express();

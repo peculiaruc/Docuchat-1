@@ -28,18 +28,24 @@ export type DocumentMinAggregateOutputType = {
   id: string | null
   userId: string | null
   status: string | null
+  deletedAt: Date | null
+  deletedBy: string | null
 }
 
 export type DocumentMaxAggregateOutputType = {
   id: string | null
   userId: string | null
   status: string | null
+  deletedAt: Date | null
+  deletedBy: string | null
 }
 
 export type DocumentCountAggregateOutputType = {
   id: number
   userId: number
   status: number
+  deletedAt: number
+  deletedBy: number
   _all: number
 }
 
@@ -48,18 +54,24 @@ export type DocumentMinAggregateInputType = {
   id?: true
   userId?: true
   status?: true
+  deletedAt?: true
+  deletedBy?: true
 }
 
 export type DocumentMaxAggregateInputType = {
   id?: true
   userId?: true
   status?: true
+  deletedAt?: true
+  deletedBy?: true
 }
 
 export type DocumentCountAggregateInputType = {
   id?: true
   userId?: true
   status?: true
+  deletedAt?: true
+  deletedBy?: true
   _all?: true
 }
 
@@ -139,6 +151,8 @@ export type DocumentGroupByOutputType = {
   id: string
   userId: string
   status: string
+  deletedAt: Date | null
+  deletedBy: string | null
   _count: DocumentCountAggregateOutputType | null
   _min: DocumentMinAggregateOutputType | null
   _max: DocumentMaxAggregateOutputType | null
@@ -166,12 +180,16 @@ export type DocumentWhereInput = {
   id?: Prisma.StringFilter<"Document"> | string
   userId?: Prisma.StringFilter<"Document"> | string
   status?: Prisma.StringFilter<"Document"> | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
+  deletedBy?: Prisma.StringNullableFilter<"Document"> | string | null
 }
 
 export type DocumentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
 }
 
 export type DocumentWhereUniqueInput = Prisma.AtLeast<{
@@ -181,12 +199,16 @@ export type DocumentWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.DocumentWhereInput | Prisma.DocumentWhereInput[]
   userId?: Prisma.StringFilter<"Document"> | string
   status?: Prisma.StringFilter<"Document"> | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"Document"> | Date | string | null
+  deletedBy?: Prisma.StringNullableFilter<"Document"> | string | null
 }, "id">
 
 export type DocumentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.DocumentCountOrderByAggregateInput
   _max?: Prisma.DocumentMaxOrderByAggregateInput
   _min?: Prisma.DocumentMinOrderByAggregateInput
@@ -199,66 +221,88 @@ export type DocumentScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Document"> | string
   userId?: Prisma.StringWithAggregatesFilter<"Document"> | string
   status?: Prisma.StringWithAggregatesFilter<"Document"> | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Document"> | Date | string | null
+  deletedBy?: Prisma.StringNullableWithAggregatesFilter<"Document"> | string | null
 }
 
 export type DocumentCreateInput = {
   id?: string
   userId: string
   status: string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
 }
 
 export type DocumentUncheckedCreateInput = {
   id?: string
   userId: string
   status: string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
 }
 
 export type DocumentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type DocumentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type DocumentCreateManyInput = {
   id?: string
   userId: string
   status: string
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
 }
 
 export type DocumentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type DocumentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type DocumentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  deletedBy?: Prisma.SortOrder
 }
 
 export type DocumentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  deletedBy?: Prisma.SortOrder
 }
 
 export type DocumentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
+  deletedBy?: Prisma.SortOrder
 }
 
 
@@ -267,27 +311,35 @@ export type DocumentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   id?: boolean
   userId?: boolean
   status?: boolean
+  deletedAt?: boolean
+  deletedBy?: boolean
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
   status?: boolean
+  deletedAt?: boolean
+  deletedBy?: boolean
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
   status?: boolean
+  deletedAt?: boolean
+  deletedBy?: boolean
 }, ExtArgs["result"]["document"]>
 
 export type DocumentSelectScalar = {
   id?: boolean
   userId?: boolean
   status?: boolean
+  deletedAt?: boolean
+  deletedBy?: boolean
 }
 
-export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "status", ExtArgs["result"]["document"]>
+export type DocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "status" | "deletedAt" | "deletedBy", ExtArgs["result"]["document"]>
 
 export type $DocumentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Document"
@@ -296,6 +348,8 @@ export type $DocumentPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     id: string
     userId: string
     status: string
+    deletedAt: Date | null
+    deletedBy: string | null
   }, ExtArgs["result"]["document"]>
   composites: {}
 }
@@ -722,6 +776,8 @@ export interface DocumentFieldRefs {
   readonly id: Prisma.FieldRef<"Document", 'String'>
   readonly userId: Prisma.FieldRef<"Document", 'String'>
   readonly status: Prisma.FieldRef<"Document", 'String'>
+  readonly deletedAt: Prisma.FieldRef<"Document", 'DateTime'>
+  readonly deletedBy: Prisma.FieldRef<"Document", 'String'>
 }
     
 

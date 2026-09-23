@@ -55,6 +55,7 @@ export const ModelName = {
   RefreshToken: 'RefreshToken',
   UsageLog: 'UsageLog',
   Conversation: 'Conversation',
+  Message: 'Message',
   Document: 'Document',
   Role: 'Role',
   Permission: 'Permission',
@@ -129,10 +130,23 @@ export const ConversationScalarFieldEnum = {
 export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[keyof typeof ConversationScalarFieldEnum]
 
 
+export const MessageScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  role: 'role',
+  content: 'content',
+  createdAt: 'createdAt'
+} as const
+
+export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
+
+
 export const DocumentScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  status: 'status'
+  status: 'status',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy'
 } as const
 
 export type DocumentScalarFieldEnum = (typeof DocumentScalarFieldEnum)[keyof typeof DocumentScalarFieldEnum]

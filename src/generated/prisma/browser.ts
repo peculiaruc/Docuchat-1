@@ -38,6 +38,11 @@ export type UsageLog = Prisma.UsageLogModel
  */
 export type Conversation = Prisma.ConversationModel
 /**
+ * Model Message
+ * 
+ */
+export type Message = Prisma.MessageModel
+/**
  * Model Document
  * 
  */
