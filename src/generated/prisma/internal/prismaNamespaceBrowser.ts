@@ -57,6 +57,7 @@ export const ModelName = {
   Conversation: 'Conversation',
   Message: 'Message',
   Document: 'Document',
+  Chunk: 'Chunk',
   Role: 'Role',
   Permission: 'Permission',
   UserRole: 'UserRole',
@@ -145,11 +146,25 @@ export const DocumentScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   status: 'status',
+  content: 'content',
+  chunkCount: 'chunkCount',
+  error: 'error',
   deletedAt: 'deletedAt',
   deletedBy: 'deletedBy'
 } as const
 
 export type DocumentScalarFieldEnum = (typeof DocumentScalarFieldEnum)[keyof typeof DocumentScalarFieldEnum]
+
+
+export const ChunkScalarFieldEnum = {
+  id: 'id',
+  documentId: 'documentId',
+  index: 'index',
+  content: 'content',
+  tokenCount: 'tokenCount'
+} as const
+
+export type ChunkScalarFieldEnum = (typeof ChunkScalarFieldEnum)[keyof typeof ChunkScalarFieldEnum]
 
 
 export const RoleScalarFieldEnum = {

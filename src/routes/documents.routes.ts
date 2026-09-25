@@ -5,6 +5,7 @@ import { validate } from "../middleware/validate";
 import { prisma } from "../lib/prisma";
 import { NotFoundError } from "../lib/errors";
 import { getUserPermissions } from "../services/rbac.service";
+import {documentQueue} from '../queues/document.queue';
 import {
   createDocumentSchema,
   documentParamsSchema,
@@ -114,6 +115,40 @@ router.delete('/:id',
   requirePermission('admin:documents:delete', 'documents:delete'),
   validate(documentParamsSchema),
   deleteDocument
+);
+
+router.get(
+  "/:id/processing-status",
+  requirePermission("documents:read"),
+  async (req, res, next) => {
+    try {
+      const doc = await prisma.document.findUnique({
+        where: { id: String(req.params.id) },
+        select: { id: true, status: true, error: true, userId: true },
+      });
+      if (!doc || doc.userId !== req.user!.id) {
+        return res.status(404).json({
+          success: false,
+          error: { code: "NOT_FOUND", message: "Document not found" },
+        });
+      }
+
+      const jobs = await documentQueue.getJobs(["active", "waiting"]);
+      const activeJob = jobs.find((j) => j.data.documentId === req.params.id);
+
+      res.json({
+        success: true,
+        data: {
+          status: doc.status,
+          error: doc.error,
+          jobId: activeJob?.id,
+          progress: activeJob?.progress ?? 0,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 );
 
 export default router;

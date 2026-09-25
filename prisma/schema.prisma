@@ -74,15 +74,31 @@ model Message {
 }
 
 model Document {
-    id        String    @id @default(uuid())
-    userId    String
-    status    String
-    deletedAt DateTime?
-    deletedBy String?
+    id         String    @id @default(uuid())
+    userId     String
+    status     String
+    content    String?
+    chunkCount Int       @default(0)
+    error      String?
+    deletedAt  DateTime?
+    deletedBy  String?
+    chunks     Chunk[]
 
     @@index([userId])
     @@index([status])
     @@index([userId, status])
+}
+
+model Chunk {
+    id         String   @id @default(cuid())
+    documentId String
+    index      Int
+    content    String
+    tokenCount Int      @default(0)
+    document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+    @@unique([documentId, index])
+    @@index([documentId])
 }
 
 model Role {

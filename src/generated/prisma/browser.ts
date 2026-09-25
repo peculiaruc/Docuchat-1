@@ -48,6 +48,11 @@ export type Message = Prisma.MessageModel
  */
 export type Document = Prisma.DocumentModel
 /**
+ * Model Chunk
+ * 
+ */
+export type Chunk = Prisma.ChunkModel
+/**
  * Model Role
  * 
  */
