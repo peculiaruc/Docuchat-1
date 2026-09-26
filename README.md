@@ -1,6 +1,9 @@
 # DocuChat
 
-AI-powered document Q&A API built with Express, TypeScript, Prisma, and PostgreSQL.
+AI-powered document Q&A  Chat
+
+## Technology
+API built with Express, TypeScript, Prisma, Redis, BullMQ, Axios and PostgreSQL.
 
 ## Prerequisites
 

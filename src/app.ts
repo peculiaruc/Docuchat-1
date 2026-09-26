@@ -16,7 +16,9 @@ import './events/admin.events';
 import adminRoutes from './routes/admin';
 import './events/document.events.js';
 import './queues/document.worker.js';
+import './queues/embedding.worker.js';
 import { bullBoardAdapter } from './config/bull-board.js';
+import { verifyWebhookSignature } from './middleware/verifyWebhook.js';
 
 
 const app = express();
@@ -57,6 +59,23 @@ app.use('/api/v1/admin', adminRoutes);
 
 // ===BULLBOARD===
 app.use('/admin/queues', bullBoardAdapter.getRouter());
+
+// Capture raw body for webhook routes BEFORE express.json()
+
+app.use(
+  "/webhooks",
+  express.raw({
+    type: "application/json",
+    verify: (req: any, _res, buf) => {
+      req.rawBody = buf;
+    },
+  }),
+  verifyWebhookSignature(config.WEBHOOK_SECRET, "x-signature")
+);
+
+// Then parse JSON for everything else
+app.use(express.json());
+
 
 //API V2 (is not needed now)
 // app.use('/api/v2/auth', authRoutesV2);

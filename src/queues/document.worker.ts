@@ -3,6 +3,7 @@ import { redisConnection } from './connection';
 import { prisma } from '../lib/prisma';
 import { appEvents } from '../lib/events';
 import {deadLetterQueue} from './dead-letter.queue';
+import { embeddingQueue } from './embedding.queue';
 
 function estimateTokens(text: string): number {
   return Math.ceil(text.length / 4);
@@ -62,6 +63,17 @@ const worker = new Worker(
           data: { status: 'ready', chunkCount: chunks.length },
         });
       });
+      await job.updateProgress(80);
+
+      for (const [index, text] of chunks.entries()) {
+        await embeddingQueue.add("generate-embedding", {
+          documentId,
+          userId,
+          index,
+          text,
+        });
+      }
+
       await job.updateProgress(100);
 
       // Emit event for audit/notification
@@ -70,7 +82,6 @@ const worker = new Worker(
         userId,
         chunkCount: chunks.length,
       });
-
       return { success: true, chunks: chunks.length };
 
     } catch (error) {
@@ -84,14 +95,17 @@ const worker = new Worker(
             error: (error as Error).message,
           },
         });
-
       }
       throw error; // Re-throw so BullMQ retries
     }
   },
   {
     connection: redisConnection,
-    concurrency: 3,
+    concurrency: 5,
+    limiter: {
+      max: 100,        // Max 100 jobs
+      duration: 60000, // Per 60 seconds
+    },
   }
 );
 

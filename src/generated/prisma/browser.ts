@@ -72,3 +72,8 @@ export type UserRole = Prisma.UserRoleModel
  * 
  */
 export type RolePermission = Prisma.RolePermissionModel
+/**
+ * Model WebhookEvent
+ * 
+ */
+export type WebhookEvent = Prisma.WebhookEventModel

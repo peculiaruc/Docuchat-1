@@ -61,7 +61,8 @@ export const ModelName = {
   Role: 'Role',
   Permission: 'Permission',
   UserRole: 'UserRole',
-  RolePermission: 'RolePermission'
+  RolePermission: 'RolePermission',
+  WebhookEvent: 'WebhookEvent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -207,6 +208,18 @@ export const RolePermissionScalarFieldEnum = {
 } as const
 
 export type RolePermissionScalarFieldEnum = (typeof RolePermissionScalarFieldEnum)[keyof typeof RolePermissionScalarFieldEnum]
+
+
+export const WebhookEventScalarFieldEnum = {
+  id: 'id',
+  provider: 'provider',
+  eventType: 'eventType',
+  receivedAt: 'receivedAt',
+  processedAt: 'processedAt',
+  payload: 'payload'
+} as const
+
+export type WebhookEventScalarFieldEnum = (typeof WebhookEventScalarFieldEnum)[keyof typeof WebhookEventScalarFieldEnum]
 
 
 export const SortOrder = {

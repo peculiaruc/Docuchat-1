@@ -16,6 +16,7 @@ const envSchema = z.object({
 
     OPENAI_API_KEY: z.string().optional(),
     REDIS_URL: z.string().optional(),
+    WEBHOOK_SECRET: z.string().min(1).default("dev-webhook-secret-change-me"),
 });
 
 const parsed = envSchema.safeParse(process.env);
